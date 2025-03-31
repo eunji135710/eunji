@@ -1,0 +1,48 @@
+// Main.kt
+const val N = 8 // 체스판 크기
+
+val board = IntArray(N) // board[i]는 i번째 행에 있는 퀸의 열 위치
+var solutionCount = 0 // 정답 개수 카운트
+
+// 현재 위치에 퀸을 놓을 수 있는지 확인
+fun isSafe(row: Int, col: Int): Boolean {
+    for (i in 0 until row) {
+        if (board[i] == col || Math.abs(row - i) == Math.abs(col - board[i])) {
+            return false
+        }
+    }
+    return true
+}
+
+// 백트래킹으로 퀸을 배치
+fun solve(row: Int) {
+    if (row == N) {
+        printBoard()
+        solutionCount++
+        return
+    }
+
+    for (col in 0 until N) {
+        if (isSafe(row, col)) {
+            board[row] = col
+            solve(row + 1)
+        }
+    }
+}
+
+// 체스판 출력
+fun printBoard() {
+    println("해 ${solutionCount + 1}:")
+    for (i in 0 until N) {
+        for (j in 0 until N) {
+            if (board[i] == j) print("Q ") else print(". ")
+        }
+        println()
+    }
+    println()
+}
+
+fun main() {
+    solve(0)
+    println("총 ${solutionCount}개의 해가 있습니다.")
+}
